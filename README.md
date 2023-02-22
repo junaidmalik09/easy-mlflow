@@ -34,7 +34,7 @@ Run the following command in the terminal:
 ```
 docker compose up -d
 ```
-The mlflow instance can now be accessed at http://localhost/mlflow.
+The MLFlow instance can now be accessed at http://localhost/mlflow.
 
 If the services are deployed in an EC2 instance, MLFlow can also be accessed using the public URL of the instance.
 
