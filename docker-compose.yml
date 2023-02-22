@@ -1,0 +1,32 @@
+services:
+  
+
+  mlflow:
+    image: mlflow
+    build: /data/MLFLOW
+    depends_on:
+      - db
+    ports:
+      - "5000:5000"
+    environment:
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - MLFLOW_TRACKING_USERNAME=${MLFLOW_TRACKING_USERNAME}
+      - MLFLOW_TRACKING_PASSWORD=${MLFLOW_TRACKING_PASSWORD}
+    command: mlflow server --static-prefix=/mlflow --backend-store-uri mysql+pymysql://${MYSQL_USER}:${MYSQL_PASSWORD}@db:3306/${MYSQL_DATABASE} --artifacts-destination s3://mlflow-freyr/mlartifacts --serve-artifacts --host 0.0.0.0
+
+  db:
+    restart: always
+    image: mysql/mysql-server
+    ports:
+        - "3306:3306"
+    environment:
+        - MYSQL_DATABASE=${MYSQL_DATABASE}
+        - MYSQL_USER=${MYSQL_USER}
+        - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+        - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+    volumes:
+        - dbdata:/var/lib/mysql
+  
+volumes:
+  dbdata:
